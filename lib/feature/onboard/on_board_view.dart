@@ -15,17 +15,22 @@ class OnBoardView extends StatefulWidget {
 class _OnBoardViewState extends State<OnBoardView> {
   final String _skipTitle = 'Skip';
   int _selectedIndex = 0;
+  final String _start = 'Start';
+  final String _next = 'Next';
 
-  void _incrementAndChange() {
-    if (_selectedIndex == OnBoardModels.onBoardItems.length - 1) {
+  void _incrementAndChange([int? value]) {
+    if (_selectedIndex == _isLastPage && value == null) {
       return;
     }
-    _incrementPageIndex();
+    _incrementPageIndex(value);
   }
 
-  void _incrementPageIndex() {
+  int get _isLastPage => OnBoardModels.onBoardItems.length - 1;
+  bool get _isFirstPage => _selectedIndex == 0;
+
+  void _incrementPageIndex([int? value]) {
     setState(() {
-      _selectedIndex++;
+      _selectedIndex = value ?? _selectedIndex++;
     });
   }
 
@@ -60,12 +65,17 @@ class _OnBoardViewState extends State<OnBoardView> {
             onPressed: () {},
             child: Text(_skipTitle, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey)))
       ],
-      leading: IconButton(onPressed: () {}, icon: const Icon(Icons.chevron_left_outlined, color: Colors.grey)),
+      leading: _isFirstPage
+          ? const SizedBox()
+          : IconButton(onPressed: () {}, icon: const Icon(Icons.chevron_left_outlined, color: Colors.grey)),
     );
   }
 
   PageView _pageViewItems() {
     return PageView.builder(
+      onPageChanged: (value) {
+        _incrementAndChange(value);
+      },
       itemCount: OnBoardModels.onBoardItems.length,
       itemBuilder: (context, index) {
         return OnBoardCard(
@@ -78,7 +88,7 @@ class _OnBoardViewState extends State<OnBoardView> {
   FloatingActionButton _nextButton() {
     return FloatingActionButton(
       onPressed: _incrementAndChange,
-      child: const Text('Next'),
+      child: Text(_selectedIndex == _isLastPage ? _start : _next),
     );
   }
 }

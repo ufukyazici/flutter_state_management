@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_state_management/feature/onboard/on_board_model.dart';
 import 'package:flutter_state_management/product/padding/page_padding.dart';
+import 'package:flutter_state_management/product/widget/on_board_card.dart';
 
 class OnBoardView extends StatefulWidget {
   const OnBoardView({super.key});
@@ -41,12 +42,8 @@ class _OnBoardViewState extends State<OnBoardView> with SingleTickerProviderStat
               child: PageView.builder(
                 itemCount: OnBoardModels.onBoardItems.length,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      const Text("Order your Food"),
-                      const Text("Now you can order food any time right from your mobile. "),
-                      Image.asset('asset/images/ic_chef.png'),
-                    ],
+                  return OnBoardCard(
+                    onBoardModel: OnBoardModels.onBoardItems[index],
                   );
                 },
               ),

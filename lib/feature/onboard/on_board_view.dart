@@ -5,6 +5,8 @@ import 'package:flutter_state_management/feature/onboard/tab_indicator.dart';
 import 'package:flutter_state_management/product/padding/page_padding.dart';
 import 'package:flutter_state_management/product/widget/on_board_card.dart';
 
+part './module/start_fab_button.dart';
+
 class OnBoardView extends StatefulWidget {
   const OnBoardView({super.key});
 
@@ -15,22 +17,35 @@ class OnBoardView extends StatefulWidget {
 class _OnBoardViewState extends State<OnBoardView> {
   final String _skipTitle = 'Skip';
   int _selectedIndex = 0;
-  final String _start = 'Start';
-  final String _next = 'Next';
+  ValueNotifier<bool> isBackEnable = ValueNotifier(false);
 
   void _incrementAndChange([int? value]) {
-    if (_selectedIndex == _isLastPage && value == null) {
+    if (_selectedIndex < OnBoardModels.onBoardItems.length - 1) {
+      _incrementPageIndex(value);
+    }
+    if (_isLastPage && value == null) {
+      _changeBackEnable(true);
       return;
     }
-    _incrementPageIndex(value);
+    _changeBackEnable(false);
   }
 
-  int get _isLastPage => OnBoardModels.onBoardItems.length - 1;
+  void _changeBackEnable(bool value) {
+    if (value == isBackEnable.value) return;
+
+    isBackEnable.value = value;
+  }
+
+  bool get _isLastPage => OnBoardModels.onBoardItems.length - 1 == _selectedIndex;
   bool get _isFirstPage => _selectedIndex == 0;
 
   void _incrementPageIndex([int? value]) {
     setState(() {
-      _selectedIndex = value ?? _selectedIndex++;
+      if (value != null) {
+        _selectedIndex = value;
+      } else {
+        _selectedIndex++;
+      }
     });
   }
 
@@ -47,7 +62,15 @@ class _OnBoardViewState extends State<OnBoardView> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [TabIndicator(selectedIndex: _selectedIndex), _nextButton()],
+              children: [
+                TabIndicator(selectedIndex: _selectedIndex),
+                _StartFabButton(
+                  isLastPage: _isLastPage,
+                  onPressed: () {
+                    _incrementAndChange();
+                  },
+                )
+              ],
             )
           ],
         ),
@@ -61,12 +84,15 @@ class _OnBoardViewState extends State<OnBoardView> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       actions: [
-        TextButton(
-            onPressed: () {},
-            child: Text(_skipTitle, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.grey)))
+        ValueListenableBuilder<bool>(
+          valueListenable: isBackEnable,
+          builder: (context, value, child) {
+            return value ? const SizedBox() : TextButton(onPressed: () {}, child: Text(_skipTitle));
+          },
+        ),
       ],
       leading: _isFirstPage
-          ? const SizedBox()
+          ? null
           : IconButton(onPressed: () {}, icon: const Icon(Icons.chevron_left_outlined, color: Colors.grey)),
     );
   }
@@ -82,13 +108,6 @@ class _OnBoardViewState extends State<OnBoardView> {
           onBoardModel: OnBoardModels.onBoardItems[index],
         );
       },
-    );
-  }
-
-  FloatingActionButton _nextButton() {
-    return FloatingActionButton(
-      onPressed: _incrementAndChange,
-      child: Text(_selectedIndex == _isLastPage ? _start : _next),
     );
   }
 }

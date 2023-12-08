@@ -4,6 +4,7 @@ import 'package:kartal/kartal.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
+  final String _loginTitle = "LOGIN";
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class LoginView extends StatelessWidget {
               height: context.sized.dynamicHeight(0.3),
               width: context.sized.dynamicWidth(0.3),
               child: ImageEnums.door.toImage),
+          Text(_loginTitle)
         ],
       ),
     );

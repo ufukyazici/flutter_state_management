@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_state_management/feature/login/view/login_view.dart';
+import 'package:flutter_state_management/feature/onboard/on_board_view.dart';
+import 'package:flutter_state_management/product/model/state/project_context.dart';
+import 'package:flutter_state_management/product/model/state/user_context.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,18 +12,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Material App',
-      home: const LoginView(),
-      theme: ThemeData.light().copyWith(
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-          ),
-          floatingActionButtonTheme:
-              const FloatingActionButtonThemeData(backgroundColor: Color.fromRGBO(11, 23, 84, 1))),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProjectContext()),
+        ProxyProvider<ProjectContext, UserContext>(
+          update: (context, projectContext, userContext) {
+            return userContext != null
+                ? userContext.copyWith(name: projectContext.newUserName)
+                : UserContext(projectContext.newUserName);
+          },
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Material App',
+        home: const OnBoardView(),
+        theme: ThemeData.light().copyWith(
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
+            ),
+            floatingActionButtonTheme:
+                const FloatingActionButtonThemeData(backgroundColor: Color.fromRGBO(11, 23, 84, 1))),
+      ),
     );
   }
 }

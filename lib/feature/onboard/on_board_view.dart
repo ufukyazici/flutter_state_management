@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_state_management/feature/login/view/login_view.dart';
 import 'package:flutter_state_management/feature/onboard/on_board_model.dart';
 import 'package:flutter_state_management/feature/onboard/tab_indicator.dart';
+import 'package:flutter_state_management/product/model/state/project_context.dart';
+import 'package:flutter_state_management/product/model/state/user_context.dart';
 import 'package:flutter_state_management/product/padding/page_padding.dart';
 import 'package:flutter_state_management/product/widget/on_board_card.dart';
+import 'package:kartal/kartal.dart';
+import 'package:provider/provider.dart';
 
 part './module/start_fab_button.dart';
 
@@ -68,6 +73,7 @@ class _OnBoardViewState extends State<OnBoardView> {
                   isLastPage: _isLastPage,
                   onPressed: () {
                     _incrementAndChange();
+                    context.read<ProjectContext>().changeName("asdasd");
                   },
                 )
               ],
@@ -83,11 +89,18 @@ class _OnBoardViewState extends State<OnBoardView> {
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       backgroundColor: Colors.transparent,
       elevation: 0,
+      title: Text(context.read<UserContext>().name, style: Theme.of(context).textTheme.labelMedium),
       actions: [
         ValueListenableBuilder<bool>(
           valueListenable: isBackEnable,
           builder: (context, value, child) {
-            return value ? const SizedBox() : TextButton(onPressed: () {}, child: Text(_skipTitle));
+            return value
+                ? const SizedBox()
+                : TextButton(
+                    onPressed: () {
+                      context.route.navigateToPage(const LoginView());
+                    },
+                    child: Text(_skipTitle));
           },
         ),
       ],

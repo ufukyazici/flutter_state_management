@@ -45,12 +45,18 @@ class _LoginViewState extends State<LoginView> {
                   const TextField(
                     decoration: ProjectInputDecoration("Password"),
                   ),
-                  ElevatedButton(onPressed: () {}, child: const Center(child: Text("Login"))),
+                  ElevatedButton(
+                      onPressed: _loginViewModel.isLoading
+                          ? null
+                          : () {
+                              _loginViewModel.controlTextValue();
+                            },
+                      child: const Center(child: Text("Login"))),
                   CheckboxListTile(
-                    value: context.watch<LoginViewModel>().isCheckBoxOkay,
+                    value: _loginViewModel.isCheckBoxOkay,
                     title: const Text("Remember me"),
                     onChanged: (value) {
-                      context.read<LoginViewModel>().checkBoxChange(value ?? false);
+                      _loginViewModel.checkBoxChange(value ?? false);
                     },
                   )
                 ],

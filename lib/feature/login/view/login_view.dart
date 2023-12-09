@@ -28,7 +28,9 @@ class _LoginViewState extends State<LoginView> {
       value: _loginViewModel,
       builder: (context, child) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            leading: _loadingWidget(),
+          ),
           body: SingleChildScrollView(
             child: Padding(
               padding: const PagePadding.lowAll(),
@@ -66,5 +68,9 @@ class _LoginViewState extends State<LoginView> {
         );
       },
     );
+  }
+
+  Widget _loadingWidget() {
+    return _loginViewModel.isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox();
   }
 }

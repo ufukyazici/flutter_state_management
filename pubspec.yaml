@@ -38,6 +38,9 @@ dependencies:
   kartal: ^3.5.0
   #state
   provider: ^6.1.1
+  flutter_mobx: ^2.2.0+1
+  #google
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:

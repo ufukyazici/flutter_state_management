@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_state_management/feature/onboard/on_board_view.dart';
+import 'package:flutter_state_management/feature/maps/view/map_select_view.dart';
 import 'package:flutter_state_management/product/model/state/project_context.dart';
 import 'package:flutter_state_management/product/model/state/user_context.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        home: const OnBoardView(),
+        home: const MapSelectView(),
         theme: ThemeData.light().copyWith(
             appBarTheme: const AppBarTheme(
               backgroundColor: Colors.transparent,

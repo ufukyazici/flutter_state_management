@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:vexana/vexana.dart';
 
 part 'map_model.g.dart';
 
 @JsonSerializable(createToJson: false)
-class MapModel {
+class MapModel extends INetworkModel<MapModel> {
   String? country;
   Detail? detail;
   double? lat;
@@ -13,6 +14,16 @@ class MapModel {
 
   factory MapModel.fromJson(Map<String, dynamic> json) {
     return _$MapModelFromJson(json);
+  }
+
+  @override
+  MapModel fromJson(Map<String, dynamic> json) {
+    return _$MapModelFromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson() {
+    return null;
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_state_management/feature/travel/cubit/travel_cubit.dart';
-import 'package:flutter_state_management/feature/travel/model/travel_model.dart';
 import 'package:flutter_state_management/product/padding/page_padding.dart';
 import 'package:kartal/kartal.dart';
 
@@ -62,7 +61,7 @@ class _TravelViewState extends State<TravelView> {
                             child: SizedBox(
                                 width: context.sized.dynamicWidth(0.36),
                                 child: Image.asset(
-                                  TravelModel.mockItems[index].imagePath,
+                                  state is TravelItemsLoaded ? state.items[index].imagePath : "",
                                   fit: BoxFit.fill,
                                 )),
                           );

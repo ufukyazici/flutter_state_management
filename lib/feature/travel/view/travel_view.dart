@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_state_management/feature/travel/cubit/travel_cubit.dart';
+import 'package:flutter_state_management/feature/travel/model/travel_model.dart';
 import 'package:flutter_state_management/product/padding/page_padding.dart';
 import 'package:kartal/kartal.dart';
 
@@ -44,26 +45,38 @@ class _TravelViewState extends State<TravelView> {
                           data2,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Text(data,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: Theme.of(context).colorScheme.error))
+                        InkWell(
+                          onTap: () {
+                            context.read<TravelCubit>().seeAllItems();
+                          },
+                          child: Text(data,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: Theme.of(context).colorScheme.error)),
+                        )
                       ],
                     ),
                     SizedBox(
                       height: context.sized.dynamicHeight(0.26),
-                      child: ListView.builder(
-                        itemCount: state is TravelItemsLoaded ? state.items.length : 0,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: SizedBox(
-                                width: context.sized.dynamicWidth(0.36),
-                                child: Image.asset(
-                                  state is TravelItemsLoaded ? state.items[index].imagePath : "",
-                                  fit: BoxFit.fill,
-                                )),
+                      child: BlocSelector<TravelCubit, TravelStates, List<TravelModel>>(
+                        selector: (state) {
+                          return state is TravelItemsLoaded ? state.items : context.read<TravelCubit>().allItems;
+                        },
+                        builder: (context, state) {
+                          return ListView.builder(
+                            itemCount: state.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: SizedBox(
+                                    width: context.sized.dynamicWidth(0.36),
+                                    child: Image.asset(
+                                      TravelModel.mockItems[index].imagePath,
+                                      fit: BoxFit.fill,
+                                    )),
+                              );
+                            },
                           );
                         },
                       ),

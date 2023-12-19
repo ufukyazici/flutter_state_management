@@ -27,62 +27,69 @@ class _TravelViewState extends State<TravelView> {
             appBar: AppBar(),
             body: Padding(
               padding: const PagePadding.all(),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(data3, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
-                    TextField(
-                      onChanged: (value) {
-                        context.read<TravelCubit>().searchByItems(value.toLowerCase());
-                      },
-                      decoration: const InputDecoration(border: OutlineInputBorder(), prefixIcon: Icon(Icons.search)),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          data2,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            context.read<TravelCubit>().seeAllItems();
-                          },
-                          child: Text(data,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(color: Theme.of(context).colorScheme.error)),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: context.sized.dynamicHeight(0.26),
-                      child: BlocSelector<TravelCubit, TravelStates, List<TravelModel>>(
-                        selector: (state) {
-                          return state is TravelItemsLoaded ? state.items : context.read<TravelCubit>().allItems;
-                        },
-                        builder: (context, state) {
-                          return ListView.builder(
-                            itemCount: state.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: SizedBox(
-                                    width: context.sized.dynamicWidth(0.36),
-                                    child: Image.asset(
-                                      TravelModel.mockItems[index].imagePath,
-                                      fit: BoxFit.fill,
-                                    )),
-                              );
-                            },
-                          );
-                        },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(data3, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+                  TextField(
+                    onChanged: (value) {
+                      context.read<TravelCubit>().searchByItems(value.toLowerCase());
+                    },
+                    decoration: const InputDecoration(border: OutlineInputBorder(), prefixIcon: Icon(Icons.search)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        data2,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                    )
-                  ],
-                ),
+                      InkWell(
+                        onTap: () {
+                          context.read<TravelCubit>().seeAllItems();
+                        },
+                        child: Text(data,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: Theme.of(context).colorScheme.error)),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: context.sized.dynamicHeight(0.26),
+                    child: BlocSelector<TravelCubit, TravelStates, List<TravelModel>>(
+                      selector: (state) {
+                        return state is TravelItemsLoaded ? state.items : context.read<TravelCubit>().allItems;
+                      },
+                      builder: (context, state) {
+                        return ListView.builder(
+                          itemCount: state.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: SizedBox(
+                                  width: context.sized.dynamicWidth(0.36),
+                                  child: Image.asset(
+                                    TravelModel.mockItems[index].imagePath,
+                                    fit: BoxFit.fill,
+                                  )),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state is TravelItemsSeeAll ? state.images.length : 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        final image = (state as TravelItemsSeeAll).images[index];
+                        return Image.asset(image);
+                      },
+                    ),
+                  )
+                ],
               ),
             ),
           );

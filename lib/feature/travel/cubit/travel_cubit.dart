@@ -17,7 +17,7 @@ class TravelCubit extends Cubit<TravelStates> {
   }
 
   void seeAllItems() {
-    emit(TravelItemsSeeAll(images: [
+    emit(TravelItemsSeeAll([
       ImageEnums.camp_alt.toFeedPath,
       ImageEnums.camp_alt2.toFeedPath,
     ]));
@@ -36,5 +36,5 @@ class TravelItemsLoaded extends TravelStates {
 class TravelItemsSeeAll extends TravelStates {
   final List<String> images;
 
-  TravelItemsSeeAll({required this.images});
+  TravelItemsSeeAll(this.images);
 }

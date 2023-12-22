@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Material App',
+        title: 'Flutter State Management',
         home: const TravelTabView(),
         theme: ThemeData.light().copyWith(
             tabBarTheme: const TabBarTheme(labelColor: Colors.orange, unselectedLabelColor: Colors.grey),
